@@ -2,12 +2,7 @@ def get_unit(question):
     units = ["", "g", "gram", "grams", "kg", "kilogram",
              "kilograms", "mg", "milligram", "milligrams",
              "l", "liter", "liters"]  # Allowed units
-    unit_num = {
-        "g": 1,
-        "kg": 1000,
-        "mg": 0,
-        "l": 1
-    }
+
     valid = False
     while not valid:
         unit = input(question).lower()
@@ -17,9 +12,7 @@ def get_unit(question):
         # check for exit code...
         elif unit == "xxx":
             return unit
-
         else:
-
             print("\nPlease enter either: (g,kg,mg,l)"
                   "\ngram, kilogram, milligram, Liter")
             print()
