@@ -1,10 +1,10 @@
-# checks that input is a positive number or
+# checks that input is a float or
 # integer that is more than zero. Takes in custom error message
-def num_check(question, error):
+def num_check(question, error, data_type=float):
     valid = False
     while not valid:
         try:
-            response = float(input(question))
+            response = data_type(input(question))
             if response <= 0:
                 print(error)
             else:
