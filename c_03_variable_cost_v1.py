@@ -71,18 +71,13 @@ def get_ingredients():
 
 
 # Main routine
-# recipe_name = not_blank("Recipe name: ", "The recipe name can't be blank.")
-# serving_size = num_check("Serving size: ", "The serving size must be an integer more than zero", int)
 
 ingredient_expenses = get_ingredients()
 ingredient_frame = ingredient_expenses[0]
 total_cost = ingredient_expenses[1]
-# cost_per_serving = total_cost / serving_size
 
 # Printing the results
 print()
-# print(f"Recipe: {recipe_name}")
 print(ingredient_frame)
 print()
 print(f"Total cost: {currency(total_cost)}")
-# print(f"Cost per serving (for {serving_size} servings): {currency(cost_per_serving)}")
