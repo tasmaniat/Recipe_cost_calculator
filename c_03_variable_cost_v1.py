@@ -1,7 +1,8 @@
 import pandas
 
 
-# Function to check if the user input is an integer or a float, as required
+# checks that input is either a float or an
+# integer that is more than zero. Takes in custom error message
 def num_check(question, error, num_type=float):
     valid = False
     while not valid:
@@ -31,7 +32,7 @@ def currency(x):
     return "${:.2f}".format(x)
 
 
-# Function to gather the recipe ingredients and calculate the total cost and cost per serving
+# Function to gather the recipe ingredients and calculate the total cost
 def get_ingredients():
     item_list = []
     quantity_list = []
@@ -45,11 +46,11 @@ def get_ingredients():
         if ingredient_name.lower() == "xxx":
             break
 
-        amount_needed = num_check("Amount needed : ",
-                                  "The amount must be a number more than zero")
+        amount_needed = num_check("Amount needed: ",
+                                  "Please enter a number more than 0", int)
 
-        cost = num_check("Cost for the specified amount ($): ",
-                         "The cost must be a number more than 0")
+        cost = num_check("Cost for ingredient:$ ",
+                         "Please enter a number more than 0", float)
 
         item_list.append(ingredient_name)
         quantity_list.append(amount_needed)
