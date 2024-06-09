@@ -2,6 +2,7 @@
 
 # checks if the user input is valid and returns the number and unit
 def get_number_and_unit(question):
+    # units allowed
     units = ["g", "gram", "grams",
              "kg", "kilogram", "kilograms",
              "mg", "milligram", "milligrams",
@@ -9,6 +10,10 @@ def get_number_and_unit(question):
 
     while True:
         response = input(question).strip().lower()
+        # checks if user enter a digit ( with no unit)
+        if response.isdigit():
+            return float(response), ""
+
         for unit in units:
             if response.endswith(unit):
                 number_str = response[:-len(unit)].strip()
@@ -23,7 +28,10 @@ def get_number_and_unit(question):
         print("\nPlease enter valid unit 'g,kg,mg,l'")
 
 
+# main routine goes here
+
 while True:
     user_input = get_number_and_unit("Amount of ingredient: ")
+
     print("amount:", user_input)
     print()
