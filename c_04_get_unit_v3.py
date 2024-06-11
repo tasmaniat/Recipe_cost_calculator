@@ -10,6 +10,7 @@ def get_number_and_unit(question):
 
     while True:
         response = input(question).strip().lower()
+
         # checks if user enter a digit ( with no unit)
         if response.isdigit():
             return float(response), ""
@@ -20,7 +21,7 @@ def get_number_and_unit(question):
                 try:
                     number = float(number_str)
                     if number > 0:
-                        return number, unit
+                        return f"{number} {unit}"
                     else:
                         print("\nPlease enter a positive number")
                 except ValueError:
@@ -32,6 +33,7 @@ def get_number_and_unit(question):
 
 while True:
     user_input = get_number_and_unit("Amount of ingredient: ")
-
+    if user_input == "xxx":
+        break
     print("amount:", user_input)
     print()
