@@ -13,7 +13,7 @@ def get_number_and_unit(question):
 
         # checks if user enter a digit ( with no unit)
         if response.isdigit():
-            return float(response), ""
+            return f"{response}.0"
 
         for unit in units:
             if response.endswith(unit):
