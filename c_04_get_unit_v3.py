@@ -1,5 +1,3 @@
-
-
 # checks if the user input is valid and returns the number and unit
 def get_number_and_unit(question):
     # units allowed
@@ -13,20 +11,25 @@ def get_number_and_unit(question):
 
         # checks if user enter a digit ( with no unit)
         if response.isdigit():
-            return f"{response}.0"
+            number = float(response)
+            if number <= 0:
+                print("Please enter a number more than 0")
+                print()
+                continue
+            return f"{number}.0"
 
         for unit in units:
             if response.endswith(unit):
                 number_str = response[:-len(unit)].strip()
                 try:
                     number = float(number_str)
-                    if number > 0:
-                        return f"{number} {unit}"
-                    else:
-                        print("\nPlease enter a positive number")
+                    if number <= 0:
+                        continue
+                    return f"{number} {unit}"
                 except ValueError:
                     pass
-        print("\nPlease enter valid unit 'g,kg,mg,l'")
+        print("Please enter valid unit 'g,kg,mg,l'")
+        print()
 
 
 # main routine goes here
