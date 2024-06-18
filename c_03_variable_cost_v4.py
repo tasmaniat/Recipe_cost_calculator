@@ -69,6 +69,7 @@ def get_ingredients():
     purchased_list = []
     cost_list = []
 
+    # Loop until user enters "xxx" to stop
     ingredient_name = ""
     while ingredient_name.lower() != "xxx":
         print()
@@ -77,22 +78,26 @@ def get_ingredients():
 
         if ingredient_name.lower() == "xxx":
             break
+        # Get amount needed, purchased amount, and cost
         amount = get_number_and_unit("Amount needed for recipe: ")
         purchased = get_number_and_unit("Purchased Amount: ")
         cost = num_check("Cost for ingredient:$",
                          "The cost must be a number more than 0", float)
 
+        # Add data to lists
         item_list.append(ingredient_name)
         amount_list.append(amount)
         purchased_list.append(purchased)
         cost_list.append(cost)
 
+    # Create a dictionary from the lists
     ingredient_dict = {
         "Ingredient": item_list,
         "Amount": amount_list,
         "Purchased": purchased_list,
         "Cost": cost_list
     }
+    # Convert dictionary to a pandas DataFrame
     dataframe = pandas.DataFrame(ingredient_dict)
     dataframe = dataframe.set_index('Ingredient')
 
