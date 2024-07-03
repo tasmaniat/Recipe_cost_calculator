@@ -3,15 +3,16 @@
 def get_number_and_unit(question):
     # units and their conversion factors
     units = {
-        "mg": 0.001, "milligrams": 0.001,
-        "g": 1, "grams": 1,
-        "kg": 1000, "kilograms": 1000,
-        "ml": 1, "milliliters": 1,
-        "l": 1000, "liters": 1000,
-        "kl": 1000000, "kiloliters": 1000000,
+        "mg": 0.001, "milligram": 0.001, "milligrams": 0.001,
+        "g": 1, "gram": 1, "grams": 1,
+        "kg": 1000, "kilogram": 1000, "kilograms": 1000,
+        "ml": 1, "milliliter": 1, "milliliters": 1,
+        "l": 1000, "liter": 1000, "liters": 1000,
+        "kl": 1000000, "kiloliter": 1000000, "kiloliters": 1000000,
     }
     # base units for each unit
     base_units = {"mg": "g", "g": "g", "kg": "g", "ml": "ml", "l": "ml", "kl": "ml",
+                  "milligram": "g", "gram": "g", "kilogram": "g", "milliliter": "ml", "liter": "ml", "kiloliter": "ml",
                   "milligrams": "g", "grams": "g", "kilograms": "g", "milliliters": "ml", "liters": "ml",
                   "kiloliters": "ml"}
 
