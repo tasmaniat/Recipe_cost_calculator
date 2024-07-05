@@ -1,14 +1,14 @@
 # functions goes here
 
-# checks that user response is not blank
-def not_blank(question):
-    while True:
+# Function to ensure the user input is not blank
+def not_blank(question, error):
+    valid = False
+    while not valid:
         response = input(question)
-
         if response == "":
-            print("Sorry this can't be black. Please try again")
-        else:
-            return response
+            print("{}. \nPlease try again \n".format(error))
+            continue
+        return response
 
 
 # main routine goes here
