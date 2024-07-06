@@ -1,6 +1,7 @@
-# checks if the user input is valid and returns the number and unit
+# checks if the user input is valid and returns
+# the number and unit
 def get_number_and_unit(question):
-    # units allowed
+    # units allowed list
     units = ["g", "gram", "grams",
              "kg", "kilogram", "kilograms",
              "mg", "milligram", "milligrams",
@@ -13,18 +14,23 @@ def get_number_and_unit(question):
         if response.isdigit():
             number = float(response)
             if number <= 0:
+                # check if more than 0
                 print("Please enter a number more than 0")
                 print()
                 continue
-            return f"{number}.0"
+            return f"{number}"
 
+        # Check if the response ends with a valid unit
         for unit in units:
+            # Extract the number part of the response
             if response.endswith(unit):
                 number_str = response[:-len(unit)].strip()
                 try:
                     number = float(number_str)
+                    # Check if more than 0
                     if number <= 0:
                         continue
+                        # return  number & unit as string
                     return f"{number} {unit}"
                 except ValueError:
                     pass

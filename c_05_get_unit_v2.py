@@ -47,4 +47,3 @@ while True:
         break
     print(get_unit(user_input))
 
-
