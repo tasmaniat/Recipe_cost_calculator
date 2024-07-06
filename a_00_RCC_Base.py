@@ -1,7 +1,33 @@
 import pandas
+from datetime import date
 
 
-# Checks that user has entered yes / no to question
+# function to display instructions
+def show_instructions():
+    print('''
+   *--*--*--*--*--*--* INSTRUCTIONS *--*--*--*--*--*--*
+        This calculates the cost of the recipe 
+      based on the ingredient and their quantities
+
+      First enter the recipe name & serving size.
+
+      Second for each ingredient, enter the following..
+       - Ingredient name (required, cannot be blank)
+       - Quantity needed for recipe (e.g. 15g)
+       - Quantity of purchased ingredient (e.g. 1kg)
+       - Cost of the ingredient 
+
+    Note: Units can be blank if not applicable (e.g 1, 2)
+
+       The calculator will display a table with 
+    the recipe details, including the total cost, cost 
+       per serving, and cost to make the recipe. 
+
+    This information will also be saved to a text file 
+   *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*''')
+
+
+# Checks that user has entered yes / no to a question
 def yes_no(question):
     while True:
         response = input(question).lower()
@@ -16,9 +42,8 @@ def yes_no(question):
             print("please answer yes / no")
 
 
-# checks that input is either a float or an
+# checks if input is either a float or an
 # integer that is more than zero. Takes in custom error message
-
 def num_check(question, error, num_type=float):
     valid = False
     while not valid:
@@ -48,25 +73,35 @@ def currency(x):
     return "${:.2f}".format(x)
 
 
-# Asks the user to enter a number with a unit,
+def expense_string(heading, frame, subtotal):
+    expense_heading = "**** Recipe: {} ****".format(heading)
+    expense_frame_txt = pandas.DataFrame.to_string(frame)
+    expense_sub_txt = "{} Costs: ${:.2f}".format(heading, subtotal)
+
+    return expense_heading, expense_frame_txt, expense_sub_txt
+
+
+# Gets user to enter a number with a unit,
 # then returns the value in its base unit (g or ml)
 def get_number_and_unit(question):
+    # units and their conversion factors
     units = {
-        "mg": 0.001, "milligrams": 0.001,
-        "g": 1, "grams": 1,
-        "kg": 1000, "kilograms": 1000,
-        "ml": 1, "milliliters": 1,
-        "l": 1000, "liters": 1000,
-        "kl": 1000000, "kiloliters": 1000000,
+        "mg": 0.001, "milligram": 0.001, "milligrams": 0.001,
+        "g": 1, "gram": 1, "grams": 1,
+        "kg": 1000, "kilogram": 1000, "kilograms": 1000,
+        "ml": 1, "milliliter": 1, "milliliters": 1,
+        "l": 1000, "liter": 1000, "liters": 1000,
+        "kl": 1000000, "kiloliter": 1000000, "kiloliters": 1000000,
     }
-
+    # base units for each unit
     base_units = {"mg": "g", "g": "g", "kg": "g", "ml": "ml", "l": "ml", "kl": "ml",
+                  "milligram": "g", "gram": "g", "kilogram": "g", "milliliter": "ml", "liter": "ml", "kiloliter": "ml",
                   "milligrams": "g", "grams": "g", "kilograms": "g", "milliliters": "ml", "liters": "ml",
                   "kiloliters": "ml"}
 
     while True:
         response = input(question).strip().lower()
-
+        # checks if the input is a number without unit
         if response.replace('.', '', 1).isdigit():
             number = float(response)
             if number <= 0:
@@ -75,23 +110,27 @@ def get_number_and_unit(question):
                 continue
             return f"{number}"
 
+        # Check if the input ends with a unit
         for unit, conversion_factor in units.items():
             if response.endswith(unit):
+                # takes the number part of the input
                 number_str = response[:-len(unit)].strip()
                 try:
                     number = float(number_str)
                     if number <= 0:
                         continue
+                    # gets base unit for the input unit
                     base_unit = base_units[unit]
                     return f"{number * conversion_factor} {base_unit}"
                 except ValueError:
                     pass
-        print("Please enter valid unit 'g,kg,mg,l'")
+        print("Please enter valid amount /unit 'g,kg,mg,l'")
         print()
 
 
 # Gets user ingredient details and returns data in a dataframe
 def get_ingredients():
+    # stores ingredient data
     item_list = []
     amount_list = []
     purchased_list = []
@@ -102,6 +141,7 @@ def get_ingredients():
     ingredient_name = ""
     while ingredient_name.lower() != "xxx":
         print()
+        # ensures it not blank
         ingredient_name = not_blank("Ingredient name: ",
                                     "The ingredient name can't be blank.")
 
@@ -113,6 +153,7 @@ def get_ingredients():
         cost = num_check("Cost for ingredient:$",
                          "The cost must be a number more than 0", float)
 
+        # extracts the number out of the amount and purchased string
         amount_value = float(amount.split()[0])
         purchased_value = float(purchased.split()[0])
 
@@ -138,50 +179,15 @@ def get_ingredients():
     dataframe = pandas.DataFrame(ingredient_dict)
     dataframe = dataframe.set_index('Ingredient')
 
-    # Calculate total cost
+    # Calculate total cost and total cost to make
     total_sum = dataframe['Cost'].sum()
     total_cost_to_make = dataframe['Cost to Make'].sum()
 
     return [dataframe, total_sum, total_cost_to_make]
 
 
-# Display instructions
-def show_instructions():
-    print('''
-    *-*-*-*-*-*-* INSTRUCTIONS *-*-*-*-*-*-*
-          - enter the recipe name 
-          - enter the serving size
-    
-            There will be a series of            
-          question's for each ingredient         
-    
-     enter the ingredient name (can't be blank)
-     enter the amount & unit for ingredient
-     enter the amount & unit for purchased packet
-      - - - - -(the units can be blank)- - - - - 
-           enter the cost for ingredient 
-    
-      When you have entered all the ingredients  
-         to the recipe, press 'xxx' to quit.     
-    
-     A datatable will then be printed with all the 
-     recipe details like the total cost, cost per 
-      serve and will calculate the cost to make 
-    
-    This information will also be automatically written to
-    a text file.
-    *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*''')
-
-
-def expense_string(heading, frame, subtotal):
-    expense_heading = "**** {} Costs ****".format(heading)
-    expense_frame_txt = pandas.DataFrame.to_string(frame)
-    expense_sub_txt = "\n{} Costs: ${:.2f}".format(heading, subtotal)
-
-    return expense_heading, expense_frame_txt, expense_sub_txt
-
-
-# calculate the cost per serving based on the total cost and serving size.
+# calculate the cost per serving based
+# on the total cost and serving size.
 def cost_per_serving(cost, serving_size):
     if serving_size <= 0:
         return "Please enter a valid number"
@@ -192,33 +198,101 @@ def cost_per_serving(cost, serving_size):
 
 # ******* main routine goes here *******
 print()
+# asks user if used before
 played_before = yes_no("Have you used this program before? ")
 
+# no then show instructions
 if played_before == "no":
     show_instructions()
-print("***** Program Launched! *****")
 
-# get users recipe name and serving size
-recipe_name = not_blank("Recipe name: ", "The recipe name can't be blank")
-serving_size = num_check("Serving size: ", "The serving size must be an integer more than zero")
+while True:
+    print()
+    # gets users recipe name and serving size
+    print("***** Program Launched! *****")
+    recipe_name = not_blank("Recipe name: ", "The recipe name can't be blank")
+    serving_size = num_check("Serving size: ", "The serving size must be an integer more than zero", int)
 
-# variable cost / get ingredients
-ingredient_expenses = get_ingredients()
-frame_data = ingredient_expenses[0]
-sum_total = ingredient_expenses[1]
+    print()
+    print("Please enter your recipe information below...")
+    print("Enter 'xxx' for the item name when done.")
 
-# calculate total cost per serving
-total_cps = cost_per_serving(sum_total, serving_size)
+    # variable cost / get ingredients details
+    ingredient_expenses = get_ingredients()
+    frame_data = ingredient_expenses[0]
+    sum_total = ingredient_expenses[1]
+    total_cost_to_make = ingredient_expenses[2]
 
-# ***** Printing Area *****
+    # Calculate the cost per serving
+    total_cps = cost_per_serving(sum_total, serving_size)
 
-ingredient_strings = expense_string("Ingredient", frame_data, sum_total)
-ingredient_heading = ingredient_strings[0]
-ingredient_frame_txt = ingredient_strings[1]
-ingredient_sub_txt = ingredient_strings[2]
+    # Calculate total cost
+    total_cost = sum_total
 
-print(ingredient_heading)
-print(ingredient_frame_txt)
-print()
-print("Total: ${:.2f}".format(sum_total))
-print("Cost per serving: ${:.2f} ".format(total_cps))
+    # **** Get current date for heading and filename ****
+    # get today's date
+    today = date.today()
+
+    # Get day, month and year as individual strings
+    day = today.strftime("%d")
+    month = today.strftime("%m")
+    year = today.strftime("%Y")
+
+    # ***** Printing Area *****
+    print()
+    heading = "***** Ingredient Data ({}/{}/{}) *****\n".format(day, month, year)
+    filename = "Ingredient_{}_{}_{}".format(year, month, day)
+
+    # Change frame to string so that we can export it to file
+    ingredient_string = pandas.DataFrame.to_string(frame_data)
+
+    ingredient_strings = expense_string(recipe_name, frame_data, sum_total)
+    ingredient_heading = ingredient_strings[0]
+    ingredient_frame_txt = ingredient_strings[1]
+
+    total_heading = "\n****** Total Costs ******"
+    total_cost_txt = "chicken sub Costs: ${:.2f}".format(sum_total)
+    total_make_txt = "Total cost to make: ${:.2f}".format(total_cost_to_make)
+
+    serve_heading = "\n===== Serving Costs ====="
+    serve_per_cost_txt = "Cost Per serve: ${:.2f}".format(total_cps)
+    serve_total_txt = "Total cost per serve {:.2f}".format(total_cost_to_make / serving_size)
+
+    to_write = [heading, ingredient_heading, ingredient_frame_txt,
+                total_heading, total_cost_txt, total_make_txt,
+                serve_heading, serve_per_cost_txt, serve_total_txt]
+
+    # write to file...
+    # create file to hold data (add.txt extension)
+    file_name = "{}.txt".format(filename)
+    text_file = open(file_name, "w+")
+
+    # heading
+    for item in to_write:
+        text_file.write(item)
+        text_file.write("\n")
+
+    # close file
+    text_file.close()
+
+    # Print Stuff
+    for item in to_write:
+        print(item)
+        print()
+
+    # ask user if they want to calculate cost per serving for different serving size
+    recalculate_cps = yes_no("Do you want to recalculate for different serving size?  ")
+    if recalculate_cps == "yes":
+        new_serving_size = num_check("Enter the new serving size: ",
+                                     "The serving size must be an integer more than zero", int)
+        new_total_cps = cost_per_serving(sum_total, new_serving_size)
+        print()
+        print(f"Cost per serving for {new_serving_size} servings: ${new_total_cps:.2f}")
+        print()
+
+    # ask user if they want to calculate another recipe
+    calculate_another = yes_no("Do you want to calculate another recipe? ")
+    print()
+
+    if calculate_another == "no":
+        print("Thank you for using this program")
+        break
