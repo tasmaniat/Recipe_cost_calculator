@@ -56,6 +56,7 @@ def get_unit(question):
 
 # Function to gather the recipe ingredients, amounts, units, and costs
 def get_ingredients():
+    # stores ingredient data
     item_list = []
     amount_list = []
     unit_list = []
@@ -63,27 +64,33 @@ def get_ingredients():
     purchased_unit_list = []
     cost_list = []
 
+    # Loop until user enters "xxx" to stop
     ingredient_name = ""
     while ingredient_name.lower() != "xxx":
         print()
+        # enter ingredient name , ensures that it is not blank
         ingredient_name = not_blank("Ingredient name: ",
                                     "The ingredient name can't be blank.")
         if ingredient_name.lower() == "xxx":
             break
 
-        amount = num_check("Amount needed: ",
+        # enter amount of ingredient, check if more than 0
+        amount = num_check("Amount (without unit): ",
                            "Please enter the 'number only' greater than 0")
 
         unit = get_unit("Amount unit (blank for none): ")
 
+        # enter purchased amount of ingredient, check if more than 0
         purchased = num_check("Purchased Amount: ",
                               "Please enter the 'number only' greater than 0",)
 
         purchased_unit = get_unit("Purchased Unit (blank for none): ")
 
+        # enter cost of ingredient
         cost = num_check("Cost for ingredient:$ ",
                          "Please enter a number more than 0", float)
 
+        # Add data to lists
         item_list.append(ingredient_name)
         amount_list.append(amount)
         unit_list.append(unit)
@@ -91,6 +98,7 @@ def get_ingredients():
         purchased_unit_list.append(purchased_unit)
         cost_list.append(cost)
 
+    # Create a dictionary from the lists
     ingredient_dict = {
         "Ingredient": item_list,
         "Amount": amount_list,
@@ -99,6 +107,8 @@ def get_ingredients():
         "Purchased unit": purchased_unit_list,
         "Cost": cost_list
     }
+
+    # Convert dictionary to a pandas DataFrame
     dataframe = pandas.DataFrame(ingredient_dict)
     dataframe = dataframe.set_index('Ingredient')
 

@@ -32,26 +32,27 @@ def currency(x):
     return "${:.2f}".format(x)
 
 
-# checks if user enters a number more than 0
-# with unit, then returns it as a string
+# Asks the user to enter a number with a unit,
+# then returns the value in its base unit (g or ml)
 def get_number_and_unit(question):
     # units and their conversion factors
     units = {
-        "mg": 0.001, "milligrams": 0.001,
-        "g": 1, "grams": 1,
-        "kg": 1000, "kilograms": 1000,
-        "ml": 1, "milliliters": 1,
-        "l": 1000, "liters": 1000,
-        "kl": 1000000, "kiloliters": 1000000,
+        "mg": 0.001, "milligram": 0.001, "milligrams": 0.001,
+        "g": 1, "gram": 1, "grams": 1,
+        "kg": 1000, "kilogram": 1000, "kilograms": 1000,
+        "ml": 1, "milliliter": 1, "milliliters": 1,
+        "l": 1000, "liter": 1000, "liters": 1000,
+        "kl": 1000000, "kiloliter": 1000000, "kiloliters": 1000000,
     }
     # base units for each unit
     base_units = {"mg": "g", "g": "g", "kg": "g", "ml": "ml", "l": "ml", "kl": "ml",
+                  "milligram": "g", "gram": "g", "kilogram": "g", "milliliter": "ml", "liter": "ml", "kiloliter": "ml",
                   "milligrams": "g", "grams": "g", "kilograms": "g", "milliliters": "ml", "liters": "ml",
                   "kiloliters": "ml"}
 
     while True:
         response = input(question).strip().lower()
-        # Check if the input is a number
+        # checks if the input is a number without unit
         if response.replace('.', '', 1).isdigit():
             number = float(response)
             if number <= 0:
@@ -59,24 +60,28 @@ def get_number_and_unit(question):
                 print()
                 continue
             return f"{number}"
+
         # Check if the input ends with a unit
         for unit, conversion_factor in units.items():
             if response.endswith(unit):
+                # takes the number part of the input
                 number_str = response[:-len(unit)].strip()
                 try:
                     number = float(number_str)
                     if number <= 0:
                         continue
+                    # gets base unit for the input unit
                     base_unit = base_units[unit]
                     return f"{number * conversion_factor} {base_unit}"
                 except ValueError:
                     pass
-        print("Please enter valid unit 'g,kg,mg,l'")
+        print("Please enter valid amount /unit 'g,kg,mg,l'")
         print()
 
 
 # Gets user ingredient details and returns data in a dataframe
 def get_ingredients():
+    # stores ingredient data
     item_list = []
     amount_list = []
     purchased_list = []
@@ -87,6 +92,7 @@ def get_ingredients():
     ingredient_name = ""
     while ingredient_name.lower() != "xxx":
         print()
+        # ensures it not blank
         ingredient_name = not_blank("Ingredient name: ",
                                     "The ingredient name can't be blank.")
 
@@ -98,6 +104,7 @@ def get_ingredients():
         cost = num_check("Cost for ingredient:$",
                          "The cost must be a number more than 0", float)
 
+        # extracts the number out of the amount and purchased string
         amount_value = float(amount.split()[0])
         purchased_value = float(purchased.split()[0])
 
@@ -123,7 +130,7 @@ def get_ingredients():
     dataframe = pandas.DataFrame(ingredient_dict)
     dataframe = dataframe.set_index('Ingredient')
 
-    # Calculate total cost
+    # Calculate total cost and total cost to make
     total_sum = dataframe['Cost'].sum()
     total_cost_to_make = dataframe['Cost to Make'].sum()
 
