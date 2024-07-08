@@ -2,29 +2,39 @@ import pandas
 from datetime import date
 
 
+# displays # a simple statement to welcome
+# the user into the program and tells a little about it
+def generate_welcome_statement():
+    print()
+    print(" -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-")
+    print(" ★  WELCOME TO RECIPE COST CALCULATOR  ★")
+    print(" -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-")
+    print("This program will calculate the costs for the recipe")
+    print()
+
+
 # function to display instructions
 def show_instructions():
     print('''
-   *--*--*--*--*--*--* INSTRUCTIONS *--*--*--*--*--*--*
-        This calculates the cost of the recipe 
-      based on the ingredient and their quantities
-
-      First enter the recipe name & serving size.
-
-      Second for each ingredient, enter the following..
-       - Ingredient name (required, cannot be blank)
-       - Quantity needed for recipe (e.g. 15g)
-       - Quantity of purchased ingredient (e.g. 1kg)
-       - Cost of the ingredient 
-
-    Note: Units can be blank if not applicable (e.g 1, 2)
-
-       The calculator will display a table with 
-    the recipe details, including the total cost, cost 
-       per serving, and cost to make the recipe. 
-
-    This information will also be saved to a text file 
-   *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*''')
+*--*--*--*--*--*--* INSTRUCTIONS *--*--*--*--*--*--*
+    1. enter recipe name & serving size.
+    
+    2. For each ingredient, enter...
+     - Ingredient (required, cannot be blank)
+     - Quantity needed for recipe (e.g. 15g)
+     - Quantity of purchased ingredient (e.g. 1kg)
+     - Cost of the ingredient 
+     
+        Allowed units: g, kg, mg, ml, l, kl 
+        (or leave blank if not applicable)
+ 
+    A data table will be displayed and its costs
+    This information will be saved to a text file 
+     
+     3. enter new serving size (optional)
+     4. calculate for another recipe (optional)
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+   ''')
 
 
 # Checks that user has entered yes / no to a question
@@ -124,7 +134,7 @@ def get_number_and_unit(question):
                     return f"{number * conversion_factor} {base_unit}"
                 except ValueError:
                     pass
-        print("Please enter valid amount /unit 'g,kg,mg,l'")
+        print("Please enter valid amount /unit 'g,kg,mg,ml,kl,l'")
         print()
 
 
@@ -183,6 +193,11 @@ def get_ingredients():
     total_sum = dataframe['Cost'].sum()
     total_cost_to_make = dataframe['Cost to Make'].sum()
 
+    # Currency Formatting (uses currency function)
+    add_dollars = ['Cost to Make', 'Cost']
+    for item in add_dollars:
+        dataframe[item] = dataframe[item].apply(currency)
+
     return [dataframe, total_sum, total_cost_to_make]
 
 
@@ -197,7 +212,9 @@ def cost_per_serving(cost, serving_size):
 
 
 # ******* main routine goes here *******
-print()
+# a simple statement to welcome the user into the program
+generate_welcome_statement()
+
 # asks user if used before
 played_before = yes_no("Have you used this program before? ")
 
@@ -250,12 +267,12 @@ while True:
     ingredient_frame_txt = ingredient_strings[1]
 
     total_heading = "\n****** Total Costs ******"
-    total_cost_txt = "chicken sub Costs: ${:.2f}".format(sum_total)
-    total_make_txt = "Total cost to make: ${:.2f}".format(total_cost_to_make)
+    total_cost_txt = f"{recipe_name} Costs: ${sum_total:.2f}"
+    total_make_txt = f"Total cost to make: ${total_cost_to_make:.2f}"
 
     serve_heading = "\n===== Serving Costs ====="
-    serve_per_cost_txt = "Cost Per serve: ${:.2f}".format(total_cps)
-    serve_total_txt = "Total cost per serve {:.2f}".format(total_cost_to_make / serving_size)
+    serve_per_cost_txt = f"Cost Per serve: ${total_cps:.2f}"
+    serve_total_txt = f"Total cost per serve {total_cost_to_make / serving_size:.2f}"
 
     to_write = [heading, ingredient_heading, ingredient_frame_txt,
                 total_heading, total_cost_txt, total_make_txt,

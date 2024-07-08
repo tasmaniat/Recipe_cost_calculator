@@ -14,29 +14,28 @@ def yes_no(question):
             print("please answer yes / no")
 
 
-# Display instructions
+# function to display instructions
 def show_instructions():
     print('''
-   *--*--*--*--*--*--* INSTRUCTIONS *--*--*--*--*--*--*
-        This calculates the cost of the recipe 
-      based on the ingredient and their quantities
+*--*--*--*--*--*--* INSTRUCTIONS *--*--*--*--*--*--*
+    1. enter recipe name & serving size.
 
-      First enter the recipe name & serving size.
+    2. For each ingredient, enter...
+     - Ingredient (required, cannot be blank)
+     - Quantity needed for recipe (e.g. 15g)
+     - Quantity of purchased ingredient (e.g. 1kg)
+     - Cost of the ingredient 
 
-      Second for each ingredient, enter the following..
-       - Ingredient name (required, cannot be blank)
-       - Quantity needed for recipe (e.g. 15g)
-       - Quantity of purchased ingredient (e.g. 1kg)
-       - Cost of the ingredient 
+        Allowed units: g, kg, mg, ml, l, kl 
+        (or leave blank if not applicable)
 
-    Note: Units can be blank if not applicable (e.g 1, 2)
+    A data table will be displayed and its costs
+    This information will be saved to a text file 
 
-       The calculator will display a table with 
-    the recipe details, including the total cost, cost 
-       per serving, and cost to make the recipe. 
-
-    This information will also be saved to a text file 
-   *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*''')
+     3. enter new serving size (optional)
+     4. calculate for another recipe (optional)
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+   ''')
 
 
 # Main Routine goes here...
