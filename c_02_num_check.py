@@ -19,7 +19,7 @@ user_choice = ""
 while user_choice != "xxx":
     get_int = num_check("Amount of ingredient: ",
                         "Please enter an amount more than 0 \n",
-                        int)
+                        float)
     get_cost = num_check("Cost of ingredient:$",
                          "Please enter an amount more than 0 \n",
                          float)
