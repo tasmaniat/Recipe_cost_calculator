@@ -2,9 +2,9 @@ import pandas
 from datetime import date
 
 
-# displays # a simple statement to welcome
-# the user into the program and tells a little about it
-def generate_welcome_statement():
+# displays a simple statement
+# to welcome the user into the program.
+def welcome_statement():
     print()
     print(" -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-")
     print(" ★  WELCOME TO RECIPE COST CALCULATOR  ★")
@@ -134,7 +134,7 @@ def get_number_and_unit(question):
                     return f"{number * conversion_factor} {base_unit}"
                 except ValueError:
                     pass
-        print("Please enter valid amount /unit 'g,kg,mg,ml,kl,l'")
+        print("Please enter valid amount / unit 'g,kg,mg,ml,kl,l'")
         print()
 
 
@@ -213,7 +213,7 @@ def cost_per_serving(cost, serving_size):
 
 # ******* main routine goes here *******
 # a simple statement to welcome the user into the program
-generate_welcome_statement()
+welcome_statement()
 
 # asks user if used before
 played_before = yes_no("Have you used this program before? ")
@@ -267,16 +267,14 @@ while True:
     ingredient_frame_txt = ingredient_strings[1]
 
     total_heading = "\n****** Total Costs ******"
-    total_cost_txt = f"{recipe_name} Costs: ${sum_total:.2f}"
     total_make_txt = f"Total cost to make: ${total_cost_to_make:.2f}"
 
     serve_heading = "\n===== Serving Costs ====="
-    serve_per_cost_txt = f"Cost Per serve: ${total_cps:.2f}"
-    serve_total_txt = f"Total cost per serve {total_cost_to_make / serving_size:.2f}"
+    serve_total_txt = f"Total cost per serve: ${total_cost_to_make / serving_size:.2f}"
 
     to_write = [heading, ingredient_heading, ingredient_frame_txt,
-                total_heading, total_cost_txt, total_make_txt,
-                serve_heading, serve_per_cost_txt, serve_total_txt]
+                total_heading,  total_make_txt,
+                serve_heading,  serve_total_txt]
 
     # write to file...
     # create file to hold data (add.txt extension)
@@ -301,7 +299,7 @@ while True:
     if recalculate_cps == "yes":
         new_serving_size = num_check("Enter the new serving size: ",
                                      "The serving size must be an integer more than zero", int)
-        new_total_cps = cost_per_serving(sum_total, new_serving_size)
+        new_total_cps = cost_per_serving(total_cost_to_make, new_serving_size)
         print()
         print(f"Cost per serving for {new_serving_size} servings: ${new_total_cps:.2f}")
         print()
