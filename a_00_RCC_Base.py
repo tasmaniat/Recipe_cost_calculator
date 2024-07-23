@@ -18,19 +18,19 @@ def show_instructions():
     print('''
 *--*--*--*--*--*--* INSTRUCTIONS *--*--*--*--*--*--*
     1. enter recipe name & serving size.
-    
+
     2. For each ingredient, enter...
      - Ingredient (required, cannot be blank)
      - Quantity needed for recipe (e.g. 15g)
      - Quantity of purchased ingredient (e.g. 1kg)
      - Cost of the ingredient 
-     
+
         Allowed units: g, kg, mg, ml, l, kl 
         (or leave blank if not applicable)
- 
+
     A data table will be displayed and its costs
     This information will be saved to a text file 
-     
+
      3. enter new serving size (optional)
      4. calculate for another recipe (optional)
 *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
@@ -273,8 +273,8 @@ while True:
     serve_total_txt = f"Total cost per serve: ${total_cost_to_make / serving_size:.2f}"
 
     to_write = [heading, ingredient_heading, ingredient_frame_txt,
-                total_heading,  total_make_txt,
-                serve_heading,  serve_total_txt]
+                total_heading, total_make_txt,
+                serve_heading, serve_total_txt]
 
     # write to file...
     # create file to hold data (add.txt extension)
